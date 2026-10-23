@@ -1,0 +1,91 @@
+# .replica/gate.manifest.yml —— 门禁配置（模板）
+
+> 复制为 `<项目根>/.replica/gate.manifest.yml`。
+> **格式必须与 `templates/blueprint/SCHEMAS.md` §15 完全一致**：`gates/run.py` 按本结构解析，字段名一个字都不能错。
+> `gates/run.py` 只读本文件，不写死任何项目路径或数字（R16 的配套：门禁与项目解耦）。
+
+```yaml
+project: rebuild
+tier: A                     # A | B | C
+target: "目标应用 8.x"
+baseline_commit: "77503da"
+thresholds:
+  parity_feature: 80        # G9 功能分下限
+  consecutive_runs: 3       # G8 连跑次数
+required:
+  evidence_dirs: [evidence, screens]
+  contract_sections: 16
+  vertical_slice_evidence: SPEC/vertical-slice.md
+na_approved:                # 经批准的 N/A（G3 后不许新增）
+  - id: G11.commercial
+    reason: "A 档本地自用，不做商店合规"
+    approved_by: Wayen
+    approved_at: "2026-10-23T10:40+08:00"
+```
+
+## 字段定义（逐条，改一个字段就等于改门禁）
+
+| 字段 | 类型 | 必填 | 取值 | 谁在用 | 填错的后果 |
+|---|---|---|---|---|---|
+| `project` | 字符串 | 是 | 项目短名（小写连字符） | 所有门的输出标题 | 只影响展示，不影响判定 |
+| `tier` | 枚举 | 是 | `A` / `B` / `C` | G0（与 `PROJECT.md` 比对）、G11（按档位分流） | 档位写错 → S11 做错一半的事；G0 会 FAIL |
+| `target` | 字符串（含引号） | 是 | `<应用名> <版本>` | G0（制品身份完整性）、G3（冻结记录比对） | 无版本号 → G0 视为缺项 |
+| `baseline_commit` | 字符串 | 是 | git 短 commit 或 `"unknown"` | G6/G8（测试结果文件比对）、R15（裸行号引用） | 无法定位基线 → G8 结果不可追溯 |
+| `thresholds.parity_feature` | 整数 | 是 | 默认 `80` | G9 | 调低 = 降低交付标准，须写 `na_approved` 说明 |
+| `thresholds.consecutive_runs` | 整数 | 是 | 默认 `3` | G8 | 调低 = 允许单次绿，违反 R5 |
+| `required.evidence_dirs` | 字符串列表 | 是 | 如 `[evidence, screens]` | G1（证据入版本控制） | 缺 → G1 无法判证据完整性 |
+| `required.contract_sections` | 整数 | 是 | 必须 `16` | G2（契约节数） | 改小 = 允许缺节，直接造假 |
+| `required.vertical_slice_evidence` | 路径 | 是 | 如 `SPEC/vertical-slice.md` | G4（竖切证据存在） | 缺 → 无竖切也能过门 |
+| `na_approved` | 对象列表 | 是（可为 `[]`） | 见下表 | G0–G11、R20 | 空数组与缺字段含义不同：空数组 = 确认无 N/A；缺字段 = 没想过 |
+
+### `na_approved` 单条结构
+
+| 键 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| `id` | 字符串 | 是 | `<门号>.<条目>`，如 `G11.commercial`、`G6.keyboard` |
+| `reason` | 字符串 | 是 | 为什么这条不适用。**空理由的 N/A 视为无效（R20）** |
+| `approved_by` | 字符串 | 是 | 谁批准的（必须是产品官） |
+| `approved_at` | ISO 8601 带时区 | 是 | 批准时间 |
+
+## 三条硬规则
+
+1. **`tier` 必须与 `PROJECT.md` 的档位一致**。不一致 → G0 FAIL（这是刻意设计的：档位写歪，S11 会白做一遍）。
+2. **`na_approved` 在 G3 之后不许新增**。已存在的不删、不修改理由；需要新增说明你在降低标准，必须停下来想清楚（R20）。
+3. **本文件不得出现项目专属的硬编码**：不写绝对路径、不写具体文件名清单（清单放 `required.evidence_dirs`）、不写判定逻辑。逻辑在 `gates/rules/`，阈值在这里。
+
+## 各档位的最小差异
+
+| 档位 | `tier` | `na_approved` 典型条目 |
+|---|---|---|
+| A 本地自用 | `A` | `G11.installer`、`G11.commercial`、`G11.payment`（三条都写理由：本地自用不需要安装器/商店/支付） |
+| B 半自用 | `B` | 通常只有 `G11.commercial`、`G11.payment` |
+| C 商业 | `C` | 通常为空 `[]`（全部适用） |
+
+```yaml
+# A 档实例
+na_approved:
+  - id: G11.installer
+    reason: "A 档本地运行，直接 ./run.sh 启动，不做安装包"
+    approved_by: Wayen
+    approved_at: "2026-10-23T10:40+08:00"
+  - id: G11.commercial
+    reason: "A 档本地自用，不做商店合规与品牌清扫"
+    approved_by: Wayen
+    approved_at: "2026-10-23T10:40+08:00"
+  - id: G11.payment
+    reason: "A 档不收费，无支付路径"
+    approved_by: Wayen
+    approved_at: "2026-10-23T10:40+08:00"
+```
+
+## 跑门（本文件的唯一消费者）
+
+```bash
+python3 gates/run.py --stage all --project .        # 全部
+python3 gates/run.py --stage G6 --project .         # 单门
+python3 gates/run.py --stage G3 --project . --json   # 机读
+```
+
+退出码：`0` 全通；`1` 有 FAIL；`2` 只有 BLOCKED。末行固定打印 `__RESULT__ pass=N fail=M blocked=K na=J`。
+
+**BLOCKED ≠ PASS**（R20）。本文件缺失或解析失败时，门禁必须报 BLOCKED 并以退出码 2 结束，不许崩、也不许当通过。

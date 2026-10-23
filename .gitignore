@@ -1,0 +1,51 @@
+# 复制重建体系 · 忽略规则
+# 目的：只让"人写的"和"必须复现的"进版本控制，机器生成的垃圾不进。
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# ---- macOS ----
+.DS_Store
+._*
+
+# ---- 编辑器 ----
+.vscode/
+.idea/
+*.swp
+*~
+
+# ---- 临时产物 ----
+/tmp/
+_archive/
+*.log
+
+# ---- 测试与运行产物（可重新生成）----
+# 注意：gates/fixtures/ 必须保留 —— 它是门禁自测的地基，不是产物。
+#       fixtures 由 gates/fixtures/_make.py 生成，但生成结果是"源码级"的，
+#       要跟着一起走，否则 118 项门禁自测无法运行。
+*.coverage
+.coverage
+htmlcov/
+
+# ---- 本项目特有的产物 ----
+# 体系总览.html 是 build-html.py 的产物，但它同时是交付物（离线可读的完整手册），
+# 所以**不忽略**。若要忽略，取消下面这行的注释：
+# 体系总览.html
+
+# ---- 个人环境（绝不提交）----
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+
+# ---- 公开版构建环境（隔离 venv，仅用于重生成 HTML）----
+.venv-build/
+
+# ---- v1 归档（内部溯源资料，含修改原应用的实验记录，不随公开版发布）----
+/v1-archive/

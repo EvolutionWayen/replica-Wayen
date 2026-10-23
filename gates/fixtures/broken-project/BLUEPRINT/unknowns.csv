@@ -1,0 +1,3 @@
+unknown_id,area,description,impact,evidence_gap,verification_action,owner,blocking,status
+U-001,S-02-任务详情,提醒时间的时区口径：原版按设备本地时区还是按任务创建时时区计算,F-DATE-EDIT 的提醒时刻、LK-004 日历实例时间,缺少跨时区切换前后的提醒投递记录,把系统时区从 +08:00 改到 +09:00，新建一条 09:00 提醒并观察投递时刻，记入 evidence/notes-2026-10-21.md,blueprint-smith,no,open
+U-002,M-REPEAT-自定义,原版「每月第 N 周」规则在自定义浮层里是否存在,F-REPEAT-SET 的自定义分支,自定义浮层截图只覆盖了按周维度，未见按月维度入口,在自定义浮层展开「按月」分组并截图；若原版无此层，记 DECISIONS.md 的 D-003,product-owner,no,accepted-risk

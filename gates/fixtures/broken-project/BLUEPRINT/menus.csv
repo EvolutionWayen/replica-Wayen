@@ -1,0 +1,11 @@
+node_id,parent_id,path,order,type,label,shortcut,visibility_cond,enabled_cond,checked_cond,command,contract_ref,screens,default_item,notes
+M-DATE,ROOT,日期,1,submenu,日期,⌘D,详情面板可见时出现；只读分享视图隐藏（隐藏后布局不留空位，焦点交给标题输入框）,需有可写权限；退出冲刷阶段整段菜单禁用并显示「正在保存」,子菜单无自身选中态，当前值由 detail.dueDate 草稿决定,Cmd.OpenDateMenu,contracts/C-F-DATE-EDIT.md,S-02,M-DATE-TODAY,顶层子菜单；每次打开都把焦点放在「今天」
+M-DATE-TODAY,M-DATE,日期 › 今天,1,action,今天,⌘T,始终可见,始终可用（有选中任务）,不是选中态，选择后收起菜单并把 dueDate 置为今天,Cmd.SetDateToday,contracts/C-F-DATE-EDIT.md,S-02,-,快捷项
+M-DATE-TOMORROW,M-DATE,日期 › 明天,2,action,明天,⌘M,始终可见,始终可用（有选中任务）,不是选中态，选择后收起菜单并把 dueDate 置为次日,Cmd.SetDateTomorrow,contracts/C-F-DATE-EDIT.md,S-02,-,快捷项
+M-DATE-SEP-1,M-DATE,日期 › 分隔线,3,separator,——,-,始终可见,-,-,-,-,S-02,-,纯分隔线，无行为
+M-DATE-CUSTOM,M-DATE,日期 › 自定义…,4,action,自定义…,⌘⇧D,始终可见,需有可写权限；同步写入中禁用并提示「保存中」,草稿值由打开的日期浮层决定，浮层关闭后以提交值为准,Cmd.OpenDatePicker,contracts/C-F-DATE-EDIT.md,S-02,-,打开浮层
+M-REPEAT,ROOT,重复,2,submenu,重复,-,重复功能已开启时出现；关闭时整段隐藏，菜单高度自动减少一行,需有可写权限；退出冲刷阶段禁用,子菜单无自身选中态，由 repeat.enabled 决定是否显示勾,Cmd.OpenRepeatMenu,contracts/C-F-REPEAT.md,S-02,M-REPEAT-NONE,顶层子菜单；默认高亮「不重复」
+M-REPEAT-NONE,M-REPEAT,重复 › 不重复,1,radio,不重复,-,始终可见,始终可用,repeat.rule 为空或 'NONE' 时选中,Cmd.ClearRepeat,contracts/C-F-REPEAT.md,S-02,-,清除项
+M-REPEAT-WEEKLY,M-REPEAT,重复 › 每周工作日,2,radio,每周工作日,⌘⇧W,repeat.rule 为 WEEKLY 时高亮；其余规则下仍显示但不高亮,需有可写权限；云端同步中禁用并提示「同步中」,repeat.rule == 'WEEKLY' 且 repeat.byday 覆盖周一至周五,Cmd.SetRepeatWeeklyWorkdays,contracts/C-F-REPEAT.md,S-02,-,常用项
+M-REPEAT-CUSTOM,M-REPEAT,重复 › 自定义…,3,action,自定义…,-,始终可见,需有可写权限,repeat.rule 为 CUSTOM 时右侧显示勾；否则显示箭头,Cmd.OpenRepeatCustom,contracts/C-F-REPEAT.md,S-02,-,打开浮层
+M-REPEAT-LABEL-1,M-REPEAT,重复 › 频率,4,label,频率,-,-,-,-,-,-,S-02,-,分组说明文字，不可点击

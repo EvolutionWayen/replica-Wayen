@@ -1,0 +1,20 @@
+link_id,source_id,event,affected_screen,affected_control,data,refresh_timing,state_handling,test_ref,status
+LK-001,F-DATE-EDIT,TaskDateChanged{taskId},S-01,"主列表行内日期徽标（行高不变，徽标文本由""10月23日 周五 15:30""改为""10月26日 周一 15:30""）",E01.dueDate,写入发起即乐观更新；事务提交成功后以库里值校正一次（差值则回滚并提示）,保留该行选中态与列表滚动位置；行因日期排序发生位移时，焦点跟随行本身而非屏幕坐标,T-101,wired
+LK-002,F-DATE-EDIT,TaskDateChanged{taskId},S-01,"当前清单列表成员：该行是否仍属于本清单（如""今天""清单）",E01.dueDate + 当前清单筛选口径,事务提交成功 → 事件广播 → 重新求值成员并播放 200ms 移出动画,若该行移出当前列表，焦点落到原位置下一行；若列表变空则显示该清单空态；筛选条件本身不清空,T-102,wired
+LK-003,F-DATE-EDIT,TaskDateChanged{taskId},S-01,左侧栏「今天」「最近7天」「收集箱」各角标数字,角标统计口径：status==0 且 deleted==0 且 dueDate 落在对应区间,事务提交成功后重算受影响清单；只重算区间包含新旧两个日期的清单，其余不清算,角标动画持续 180ms 数字滚动；侧栏滚动位置与折叠状态不变,T-103,wired
+LK-004,F-DATE-EDIT,TaskDateChanged{taskId},S-02,"详情面板""日期""行文案与右侧重复图标",E01.dueDate、E01.isAllDay、E01.repeatFlag,乐观更新（点击即变）；失败回滚,"详情滚动位置与焦点保持在""日期""行；若该行被隐藏（任务进回收站）焦点落到""标题""框",T-104,wired
+LK-005,F-DATE-EDIT,TaskDateChanged{taskId},S-07,日历视图：该条从旧日期格移除、落到新日期格,E01.dueDate + 重复展开结果,事务提交成功 → 日历订阅失效 → 下次渲染时重算（若日历当前可见则立即重算）,保留当前月/周视图与滚动位置；若旧格因移除而变空，该格仍保留格子本身不塌陷,T-105,wired
+LK-006,F-DATE-EDIT,TaskDateChanged{taskId},S-08,搜索结果行的日期徽标与排序位置,E01.dueDate,下次发起搜索时生效；已打开的结果列表不主动刷新（避免打断用户阅读）,保留搜索结果选中项与滚动位置；若该条因日期变化重新排序，选中跟随条目,T-106,wired
+LK-007,F-DATE-EDIT,TaskDateChanged{taskId},S-10,提醒调度队列：该任务的下次触发时刻,E01.remindTime（由 dueDate 与提醒偏移派生）,事务提交成功 → 调度器重算该任务的 remindTime → 取消旧定时器并注册新定时器,已弹出的提醒气泡不收回；未弹出的按新时刻重排,T-107,wired
+LK-008,F-DATE-EDIT,TaskDateChanged{taskId},ROOT,无界面表现但必须一致的面：撤销栈条目,"撤销记录 {taskId, prevDueDate, prevIsAllDay, prevRemindTime}",写入成功后 1 帧内入栈，5 秒后过期,撤销栈不清空其他功能的条目；连续改日期时只保留最后一版的撤销点,T-108,wired
+LK-009,F-DATE-EDIT,DueDateCleared{taskId},S-01,"主列表行：日期徽标消失，行归入""收集箱""（若无清单归属）",E01.dueDate、E01.isAllDay、E01.remindTime,"事务提交成功 → 该行从""今天""等日期清单移出 → 收集箱计数 +1","移出后焦点落到下一行；若原本在""今天""清单且移出后为空，切到收集箱并保持侧栏展开状态",T-109,pending
+LK-010,F-QUICKADD,TaskCreated{taskId},S-01,主列表顶部插入一行（按当前排序规则落位），并短暂高亮 600ms,E01 全字段 + E01.projectId 默认值,写入成功后插入；不做乐观插入（避免写失败时闪现幽灵行）,"若用户当前有筛选，新建行若不满足筛选则不显示，仅在底部提示""已添加到 <清单名>""；焦点留在快速添加输入框以便连续录入",T-110,wired
+LK-011,F-QUICKADD,TaskCreated{taskId},S-01,侧栏对应清单角标 +1（若新任务有日期，额外影响「今天」或「最近7天」角标）,角标统计口径同 LK-003,写入成功后重算,侧栏滚动与折叠状态不变,T-111,wired
+LK-012,F-QUICKADD,TaskCreated{taskId},S-10,若无提醒则不注册；若解析出时间词则注册一条默认提前提醒,E01.remindTime,写入成功后注册,不打断当前正在播放的其他提醒,T-112,pending
+LK-013,F-REPEAT-WEEKDAY,RepeatFlagChanged{taskId},S-01,主列表行尾重复图标 ↻ 的出现/消失,E01.repeatFlag,事务提交成功 → 该行图标刷新,行选中态与滚动位置不变,T-113,wired
+LK-014,F-REPEAT-WEEKDAY,RepeatFlagChanged{taskId},S-07,日历视图：未来实例在月/周格内批量出现或消失,E01.repeatFlag + E01.repeatFirstDate + 展开窗口（未来 60 天）,事务提交成功 → 失效日历整月缓存 → 重算当月,保留当前视图与选中日；批量变化不做逐格动画，只整体淡入淡出 150ms,T-114,wired
+LK-015,F-REPEAT-WEEKDAY,RepeatFlagChanged{taskId},S-10,提醒调度：按实例逐个注册或撤销,E01.remindTime 派生集合,事务提交成功后按新实例集合重排；旧实例的定时器统一撤销,已弹出的提醒不收回,T-115,pending
+LK-016,F-SEARCH,SearchCommitted{keywords},S-08,搜索结果列表内容、命中高亮、结果计数文案,列表查询（含已完成与回收站的任务，按 status 标记区分）,输入停止 250ms 后发起一次查询；带 generation 校验，过期结果丢弃,保留上次关键词；查询期间保留旧结果并置半透明，不清空成白屏；Esc 关闭后焦点回唤起前控件,T-116,verified
+LK-017,F-REMIND-SNOOZE,"ReminderSnoozed{taskId,until}",S-10,提醒气泡关闭；该任务下次提醒时刻推迟,E01.remindTime,写入成功后关闭气泡并重排调度,不改 E01.dueDate（延后只动提醒层）；不移动列表行位置,T-117,wired
+LK-018,F-REMIND-SNOOZE,"ReminderSnoozed{taskId,until}",S-02,"详情""提醒""行回显新时刻（如""10-26 14:35 已延后""）",E01.remindTime,下次打开详情时读取；详情当前可见则立即刷新,详情滚动位置不变,T-118,pending
+LK-019,F-DATE-EDIT,TaskCompleted{taskId},S-01,"勾选完成后行下沉到""已完成""分组；若改日期后立即完成，两命令串行执行",E01.status、E01.completedTime,各自事务提交后刷新,焦点落到下一行；不因完成而清空当前筛选,T-119,pending

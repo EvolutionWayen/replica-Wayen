@@ -1,0 +1,4 @@
+feature_id,feature,area,priority,scope,original,progress,contract_ref,acceptance_ref,evidence,notes
+F-DATE-EDIT,修改任务的日期与时间,S-01-主列表,must,in,yes,yes,contracts/C-F-DATE-EDIT.md,T-101,screens/S01-date-menu.png,-
+F-REPEAT-SET,设置与清除重复规则,S-02-任务详情,must,in,yes,yes,contracts/C-F-REPEAT.md,T-102,screens/S02-repeat-menu.png,-
+F-SYNC-CLOUD,同步到云端账号,S-04-设置,could,in,yes,no,-,-,screens/S04-sync.png,could 级，本版不做，见 REPORT/parity.md 缺失清单

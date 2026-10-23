@@ -1,0 +1,17 @@
+node_id,parent_id,path,order,type,label,shortcut,visibility_cond,enabled_cond,checked_cond,command,contract_ref,screens,default_item,notes
+M-DATE,ROOT,日期,20,submenu,日期,⌘D,始终出现（详情面板展开时；无日期时行文案为「添加日期」）,单选任务 且 视图可写 且 flushing==false,-,Cmd.OpenDateMenu,contracts/C-F-DATE-EDIT.md,S-02,M-DATE-TODAY,浮层在日期行下方展开（非模态）
+M-DATE-TODAY,M-DATE,日期 › 今天,1,action,今天,-,始终出现,任务可写,dueDate 的日期部分 == 今天（只比日期不比时分）,Cmd.SetDueDateToday,contracts/C-F-DATE-EDIT.md,S-02,-,默认高亮项；选中后立即应用并关闭
+M-DATE-TOMORROW,M-DATE,日期 › 明天,2,action,明天,-,始终出现,任务可写,dueDate 的日期部分 == 今天+1 天,Cmd.SetDueDateTomorrow,contracts/C-F-DATE-EDIT.md,S-02,-,跨月跨年自动进位
+M-DATE-WEEKEND,M-DATE,日期 › 本周末,3,action,本周末,-,始终出现,任务可写,dueDate 的日期部分 == 最近周六,Cmd.SetDueDateWeekend,contracts/C-F-DATE-EDIT.md,S-02,-,今天是周日时取下一个周六（见 U-005）
+M-DATE-NEXTMON,M-DATE,日期 › 下周一,4,action,下周一,-,始终出现,任务可写,dueDate 的日期部分 == 下一个周一,Cmd.SetDueDateNextMonday,contracts/C-F-DATE-EDIT.md,S-02,-,今天是周一时为 7 天后
+M-DATE-SEP1,M-DATE,日期 › ──,5,separator,──,-,-,-,-,-,-,S-02,-,不可聚焦，键盘跳过
+M-DATE-PICK,M-DATE,日期 › 选择日期…,6,action,选择日期…,-,始终出现,任务可写,-,Cmd.OpenDatePicker,contracts/C-F-DATE-EDIT.md,S-02,-,不应用任何值，切换到月历浮层（同一浮层内替换）
+M-DATE-CLEAR,M-DATE,日期 › 清除日期,7,action,清除日期,-,始终可见（含仅重复无日期的情况）,dueDate != null 时可用；纯重复无日期时**可见但禁用**,-,Cmd.SetDueDate（newDue=null）,contracts/C-F-DATE-EDIT.md,S-02,-,连带清 remindTime（见 D-02）；禁用时不可点但可聚焦
+M-REPEAT,ROOT,重复,21,submenu,重复,-,任务非已完成态 且 详情面板展开,任务可写,repeat != null 时行尾显示当前规则文字（这是回显不是打钩）,Cmd.OpenRepeatMenu,contracts/C-F-REPEAT.md,S-02,M-REPEAT-NONE,向右展开第二列 flyout，鼠标移回即消失
+M-REPEAT-NONE,M-REPEAT,重复 › 不重复,1,radio,不重复,-,始终出现,任务可写,repeat == null,Cmd.SetRepeatNone,contracts/C-F-REPEAT.md,S-02,-,单选组；选中后关闭整层
+M-REPEAT-DAILY,M-REPEAT,重复 › 每天,2,radio,每天,-,始终出现,任务可写,repeat.rule == 'DAILY',Cmd.SetRepeatDaily,contracts/C-F-REPEAT.md,S-02,-,-
+M-REPEAT-WEEKLY,M-REPEAT,重复 › 每周,3,radio,每周,-,始终出现,任务可写,repeat.rule == 'WEEKLY',Cmd.SetRepeatWeekly,contracts/C-F-REPEAT.md,S-02,-,选中后在本层下方展开选周几的按钮组
+M-REPEAT-WEEKLY-WORKDAYS,M-REPEAT,重复 › 每周 › 每周工作日,4,radio,每周工作日,⌘⇧W,重复已开启 且 未处于完成态,任务可写,"repeat.rule == 'WEEKLY' && repeat.byday 覆盖 {MO,TU,WE,TH,FR}",Cmd.SetRepeatWeeklyWorkdays,contracts/C-F-REPEAT.md,S-02,-,打钩依据是 byday 集合而不是「上次点过它」
+M-REPEAT-CUSTOM,M-REPEAT,重复 › 自定义…,5,submenu,自定义…,-,始终出现,任务可写,-,Cmd.OpenRepeatCustomizer,contracts/C-F-REPEAT.md,S-02,-,展开四级配置：间隔/结束于（两个子项在同一子层，不新开浮层）
+M-REPEAT-CUSTOM-INTERVAL,M-REPEAT-CUSTOM,重复 › 自定义… › 间隔,1,action,间隔（数字输入）,-,已进入自定义子层,输入在 1–99 且为整数,repeat.interval == 输入值,Cmd.SetRepeatInterval,contracts/C-F-REPEAT.md,S-02,-,越界显示内联错误且不提交
+M-REPEAT-CUSTOM-UNTIL,M-REPEAT-CUSTOM,重复 › 自定义… › 结束于,2,radio,结束于某个日期,-,已进入自定义子层,任务可写,repeat.until != null,Cmd.SetRepeatUntil,contracts/C-F-REPEAT.md,S-02,-,清空该字段表示永不结束

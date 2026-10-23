@@ -1,0 +1,6 @@
+feature_id,feature,area,priority,scope,original,progress,contract_ref,acceptance_ref,evidence,notes
+F-DATE-EDIT,修改任务的截止日期与时间,S-02 任务详情,must,in,yes,no,contracts/C-F-DATE-EDIT.md,T-101;T-102,screens/S03-date-menu-01.png,改日期会连带影响列表成员、角标、日历落格、搜索命中与提醒重排，六面见 linkage.csv
+F-REPEAT-WEEKDAY,把任务设为每周一至周五重复,S-04 重复浮层,must,in,yes,no,contracts/C-F-REPEAT.md,T-103;T-104,screens/S04-repeat-menu-02.png,"落库为 RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR；每周工作日是""每周""的预设，两者是否并列显示见 U-004"
+F-QUICKADD,用全局快捷键随手记一条任务,S-06 快速添加浮层,must,in,yes,partial,contracts/C-F-QUICKADD.md,T-105,screens/S06-quickadd.png,partial 原因：自然语言日期解析只支持今天／明天，下周与具体日期尚未接
+F-SEARCH,用关键词搜索并打开历史任务,S-08 搜索面板,should,in,yes,no,contracts/C-F-SEARCH.md,T-106,screens/S08-search.png,搜索命中高亮由独立高亮组件负责，不在本契约范围
+F-TEAM-SHARE,把清单共享给其他成员协同,S-09 设置窗口,could,out,yes,skip,-,-,-,skip 理由：本地自用单用户单实例，无账号体系；产品官已在 DECISIONS.md D-003 批准排除

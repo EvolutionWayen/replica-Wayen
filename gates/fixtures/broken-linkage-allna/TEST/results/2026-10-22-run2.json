@@ -1,0 +1,12 @@
+{
+  "run": "2026-10-22T11:00+08:00",
+  "suite": "e2e",
+  "commit": "a1b2c3d",
+  "total": 4, "passed": 4, "failed": 0, "timeout": 0,
+  "cases": [
+    {"id": "T-101", "status": "pass", "duration_ms": 812},
+    {"id": "T-102", "status": "pass", "duration_ms": 640},
+    {"id": "T-103", "status": "pass", "duration_ms": 1180},
+    {"id": "T-104", "status": "pass", "duration_ms": 1530}
+  ]
+}

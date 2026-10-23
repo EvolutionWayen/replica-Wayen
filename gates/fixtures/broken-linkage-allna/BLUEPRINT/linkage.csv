@@ -1,0 +1,6 @@
+link_id,source_id,event,affected_screen,affected_control,data,refresh_timing,state_handling,test_ref,status
+LK-001,F-DATE-EDIT,TaskDateChanged{taskId},S-01,主列表行日期徽标与「今天/明天」相对文案,TaskModel.dueDate,写入事务提交成功后同步刷新（同一事务内广播事件）,保留选中行与滚动位置；行因新日期移出筛选结果时焦点落到下一行,T-101,wired
+LK-002,F-DATE-EDIT,TaskDateChanged{taskId},S-02,详情面板日期字段与全天开关,TaskModel.dueDate,事件广播后同屏就地更新，不重新挂载面板,保留输入焦点与光标位置；正在编辑的其它字段不清空,T-101,wired
+LK-003,F-REPEAT-SET,TaskRepeatChanged{taskId},S-01,不适用：主列表重复图标与「下次发生」日期（确认该面不随重复规则变化）,TaskModel.repeat,不适用,不适用：确认该面不受重复规则影响，无需刷新,-,na
+LK-004,F-REPEAT-SET,TaskRepeatChanged{taskId},S-03,不适用：日历视图重复标记与展开实例（确认该面不随重复规则变化）,TaskModel.repeat,不适用,不适用：确认该面不受重复规则影响，无需刷新,-,na
+LK-005,F-REPEAT-SET,TaskRepeatChanged{taskId},S-01,不适用：不适用：搜索结果只按标题与备注命中，重复规则不参与索引（确认该面不随重复规则变化）,TaskModel.repeat,不适用,不适用：确认该面不受重复规则影响，无需刷新,-,na

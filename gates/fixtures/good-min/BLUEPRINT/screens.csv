@@ -1,0 +1,5 @@
+screen_id,name,entry,exits,purpose,key_components,state_filled,state_empty,state_loading,state_error,state_permission,focus_restore,flows,notes
+S-01,主列表,启动默认屏 / ⌘1,Esc 或切换到其它屏,浏览与勾选任务,"任务行,日期徽标,筛选条",yes,yes,yes,yes,yes,返回时恢复滚动位置与选中行；行被筛选移出则焦点落下一行,FL-01;FL-02,-
+S-02,任务详情,主列表点击行 / ⌘D,返回主列表 / Esc,查看与编辑单个任务,"标题,日期,重复,提醒",yes,yes,yes,yes,-,返回后焦点回到触发的输入框,FL-01;FL-02,无权限态不适用：单用户本地库，全部可写
+S-03,日历视图,⌘2 / 侧栏,切回列表,按日期看任务分布,"月网格,日期格,任务条",yes,yes,yes,yes,-,返回时保持当前月与选中日,FL-02,无权限态不适用：单用户本地库
+S-04,设置,"⌘,",关闭窗口,调整主题与启动行为,"主题选择,启动行为,关于",yes,yes,yes,yes,yes,返回时恢复上次停留的分节,-,-

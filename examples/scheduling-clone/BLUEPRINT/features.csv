@@ -1,0 +1,17 @@
+feature_id,feature,area,priority,scope,original,progress,contract_ref,acceptance_ref,evidence,notes
+F-BOOK-PAGE,访客打开预约页并看到可选时段,S-03-预约页,must,in,yes,no,contracts/C-F-BOOK-PAGE.md,T-101;T-102,recon.md#fl-01,-
+F-SLOT-PICK,访客选择时段,S-03-预约页,must,in,yes,no,contracts/C-F-SLOT-PICK.md,T-103;T-104,recon.md#fl-01,含已被他人占用时的即时失效
+F-FORM-SUBMIT,访客填写信息并提交预约,S-04-信息表单,must,in,yes,no,contracts/C-F-FORM-SUBMIT.md,T-105;T-106,screens/S04-form.png,含重复提交与幂等
+F-TZ-CONFIRM,提交前确认访客时区,S-04-信息表单,must,in,yes,no,contracts/C-F-TZ-CONFIRM.md,T-107,recon.md#u-002,原版无此步：差异化为 must
+F-BOOK-CONFIRM,预约成功页与日历文件下载,S-05-成功页,must,in,yes,no,contracts/C-F-BOOK-CONFIRM.md,T-108,screens/S05-confirm.png,-
+F-HOST-AVAIL,主理人设置可用时段,S-07-可用时段,must,in,yes,no,contracts/C-F-HOST-AVAIL.md,T-201;T-202,recon.md#fl-02,含时区与夏令时
+F-EVENT-TYPE,创建与编辑预约类型,S-06-预约类型,must,in,yes,no,contracts/C-F-EVENT-TYPE.md,T-203,screens/S06-types.png,-
+F-DASH-UPCOMING,主理人查看近期预约,S-01-仪表盘,must,in,yes,no,contracts/C-F-DASH-UPCOMING.md,T-301,recon.md#fl-03,角标与列表必须同源
+F-RESCHEDULE,访客改期,S-09-改期页,must,in,yes,no,contracts/C-F-RESCHEDULE.md,T-401;T-402,recon.md#fl-04,含旧时段释放
+F-CANCEL,访客取消预约,S-09-改期页,must,in,yes,no,contracts/C-F-CANCEL.md,T-403,recon.md#fl-05,-
+F-REMINDER-EMAIL,预约前邮件提醒我,S-01-仪表盘,must,in,yes,no,contracts/C-F-REMINDER.md,T-501,recon.md#u-005,A档本地自用：先做到本地通知
+F-SMS-REMINDER,预约前短信提醒,设置,must,in,no,no,contracts/C-F-REMINDER.md,T-502,recon.md#x-10,差异化：原版被骂最多的点（无短信）；原版 original=no
+F-FLAT-PRICING,按团队而非按人头计价,定价页,must,in,no,no,contracts/C-F-PRICING.md,T-601,recon.md#x-11,差异化：原版按人头涨价被骂
+F-TEAM-ROUNDROBIN,团队轮流分配,分配,should,out,yes,skip,-,-,recon.md#x-12,A档第一版不做：需要多主理人与负载模型
+F-WEBSITE-EMBED,网站嵌入组件,集成,could,out,yes,skip,-,-,recon.md#x-13,A档不做：需要独立可分发的 JS 包
+F-MARKETPLACE,合作伙伴市场,集成,could,out,yes,skip,-,-,recon.md#x-20,原版的网络效应不是功能，无法复刻
